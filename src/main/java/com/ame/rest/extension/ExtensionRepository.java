@@ -1,4 +1,4 @@
-package com.mer.rest.extension;
+package com.ame.rest.extension;
 
 import org.springframework.data.repository.Repository;
 

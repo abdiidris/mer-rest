@@ -1,4 +1,4 @@
-package com.mer.rest.extension;
+package com.ame.rest.extension;
 
 public class ExtensionService {
 
