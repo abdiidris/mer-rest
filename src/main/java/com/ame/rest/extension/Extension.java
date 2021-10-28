@@ -1,4 +1,4 @@
-package com.mer.rest.extension;
+package com.ame.rest.extension;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
