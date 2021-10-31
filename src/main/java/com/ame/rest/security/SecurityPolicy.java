@@ -20,7 +20,7 @@ public class SecurityPolicy extends WebSecurityConfigurerAdapter{
 	@Autowired
 	private CustomUserDetailsService userDetailsService;
 
-    @Value("${JWT-SIGNATURE}")
+    @Value("${JWT_SIGNATURE}")
     String JWTSignature;
 
 	@Override

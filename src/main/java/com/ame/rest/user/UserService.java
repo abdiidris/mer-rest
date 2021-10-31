@@ -25,7 +25,7 @@ import java.util.Date;
 @Service
 public class UserService {
 
-    @Value("${JWT-SIGNATURE}")
+    @Value("${JWT_SIGNATURE}")
     String JWTSignature;
 
     @Autowired
