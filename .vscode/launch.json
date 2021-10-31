@@ -3,12 +3,6 @@
     "configurations": [
         {
             "type": "java",
-            "name": "Launch Current File",
-            "request": "launch",
-            "mainClass": "${file}"
-        },
-        {
-            "type": "java",
             "name": "Launch RestApplication",
             "request": "launch",
             "mainClass": "com.ame.rest.RestApplication",
@@ -18,7 +12,8 @@
                 "MYSQL_USERNAME":"ameuser",
                 "MYSQL_PASSWORD":"amepassword",
                 "MYSQL_DATABASE_HOST":"localhost",
-                "MYSQL_DATABASE":"amerestdb"
+                "MYSQL_DATABASE":"amerestdb",
+                "REACT-CLIENT":"http://localhost:3000"
             }
         }
     ]
