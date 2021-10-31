@@ -13,7 +13,7 @@
                 "MYSQL_PASSWORD":"amepassword",
                 "MYSQL_DATABASE_HOST":"localhost",
                 "MYSQL_DATABASE":"amerestdb",
-                "REACT-CLIENT":"http://localhost:3000"
+                "REACT_CLIENT":"http://localhost:3000"
             }
         }
     ]

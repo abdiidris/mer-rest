@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 @EnableWebMvc
 public class WebConfig implements WebMvcConfigurer {
 
-    @Value("${REACT-CLIENT}")
+    @Value("${REACT_CLIENT}")
     String ReactClient;
 
     @Override
