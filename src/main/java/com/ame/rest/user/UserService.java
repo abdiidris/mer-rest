@@ -18,7 +18,10 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import com.ame.rest.exceptions.UnexpectedUserType;
 import com.ame.rest.security.CustomUserDetailsService;
+import com.ame.rest.user.developer.Developer;
+import com.ame.rest.user.writer.Writer;
 
 import java.util.Date;
 
@@ -52,6 +55,24 @@ public class UserService {
         return userDetailsService.getCurrentUser();
     }
 
+    public Writer getCurrentWriter() throws Exception {
+        User user = userDetailsService.getCurrentUser();
+        if (user instanceof Writer) {
+            return (Writer) userDetailsService.getCurrentUser();
+        } else {
+            throw new UnexpectedUserType("authenticated user is not a writer");
+        }
+    }
+
+    public Developer getCurrentDeveloper() throws Exception {
+        User user = userDetailsService.getCurrentUser();
+        if (user instanceof Developer) {
+            return (Developer) userDetailsService.getCurrentUser();
+        } else {
+            throw new UnexpectedUserType("authenticated user is not a developer");
+        }
+    }
+
     public boolean validateUserInfo(User user) {
 
         // check password has Minimum eight characters, at least one letter, one number
@@ -70,9 +91,10 @@ public class UserService {
         return passwordSecure && emailValid;
     }
 
-    public String encodePassword(String password){
+    public String encodePassword(String password) {
         return PASSWORD_ENCODER.encode(password);
     }
+
     public String getJWTToken(User user) {
 
         List<GrantedAuthority> grantedAuthorities = AuthorityUtils.createAuthorityList(user.getRoles());
@@ -104,5 +126,18 @@ public class UserService {
 
     public String getJWTSignature() {
         return JWTSignature;
+    }
+
+    public boolean userExists(User user) {
+        return repo.findByEmail(user.getEmail()) != null;
+    }
+
+    public void registerNewUser(User user) {
+        
+        user.setPassword(this.encodePassword(user.getPassword()));
+        repo.save(user);
+
+        // add default roles
+        this.addRoles(user, user.getDefaultRoles());
     }
 }
