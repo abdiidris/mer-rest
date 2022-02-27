@@ -4,9 +4,7 @@ import java.util.List;
 import com.ame.rest.exceptions.MissingParameterException;
 import com.ame.rest.user.UserService;
 import com.ame.rest.util.DTOFactory;
-import com.ame.rest.util.dto.BrowseExtensionDTO;
 import com.ame.rest.util.dto.DTO;
-import com.ame.rest.util.dto.DevelopExtensionDTO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -44,7 +42,7 @@ public class ExtensionService {
     }
 
     public List<BrowseExtensionDTO> findAll() {
-        return   (List<BrowseExtensionDTO>) dtoFactory.getDto(repo.findAll(), DTO.DTO_TYPE.DEVELOP_EXTENSION); 
+        return   (List<BrowseExtensionDTO>) dtoFactory.getDto(repo.findAll(), DTO.DTO_TYPE.BROWSE_EXTENSION); 
     }
 
     public Extension findById(Long id) {

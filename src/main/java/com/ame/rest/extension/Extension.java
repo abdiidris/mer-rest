@@ -45,10 +45,22 @@ public class Extension {
     @OneToMany(mappedBy = "extension")
     List<Instance> instances;
 
+    // this is the value that the data for instance is initially set to
+    String initialData;
+
     protected Extension(Long id, String name, String description, Map<LINK_TYPE, String> links) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.links = links;
+        this.initialData = "";
+    }
+
+    protected Extension(Long id, String name, String description, Map<LINK_TYPE, String> links, String initialData) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.links = links;
+        this.initialData = initialData;
     }
 }

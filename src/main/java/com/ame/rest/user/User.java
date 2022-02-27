@@ -45,7 +45,7 @@ public abstract class User {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id @JsonIgnore
-    private Long id; 
+    private Long id;
 
     @NonNull
     @Column(name="email", unique=true)
@@ -62,7 +62,6 @@ public abstract class User {
 
     @JsonIgnore
     private boolean verified;
-
 
     protected User(String email, String password) {
         this.email = email;

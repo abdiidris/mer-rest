@@ -1,4 +1,4 @@
-package com.ame.rest.util.dto;
+package com.ame.rest.extension;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,11 +14,11 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import com.ame.rest.extension.Extension;
 import com.ame.rest.extension.Extension.LINK_TYPE;
 import com.ame.rest.extension.instance.Instance;
 import com.ame.rest.extension.instance.InstanceService;
 import com.ame.rest.user.developer.Developer;
+import com.ame.rest.util.dto.DTO;
 import com.ame.rest.util.dto.DTO.DTO_TYPE;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -46,9 +46,6 @@ public class DevelopExtensionDTO implements DTO{
 
     public List<String> getActiveLinks(){
         List<String> activeLinks = new ArrayList<String>();
-        for (Instance instance : instances) {
-            activeLinks.add(instanceService.getExecutionLink(instance.getId()));
-        }
         return activeLinks;
     }
 

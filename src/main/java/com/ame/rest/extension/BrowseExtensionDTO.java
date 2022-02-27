@@ -1,12 +1,12 @@
-package com.ame.rest.util.dto;
+package com.ame.rest.extension;
 
 import java.util.Map;
 import java.util.Set;
 
-import com.ame.rest.extension.Extension;
 import com.ame.rest.extension.Extension.LINK_TYPE;
 import com.ame.rest.extension.instance.Instance;
 import com.ame.rest.user.developer.Developer;
+import com.ame.rest.util.dto.DTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
@@ -53,9 +53,8 @@ public class BrowseExtensionDTO implements DTO{
         return total;
     }
 
-    //TODO add first name lastname to registration
     public String getDeveloperName() {
-        return "John Smith";
+        return developer.getEmail();
     }
 
     public int getInstanceCount() {

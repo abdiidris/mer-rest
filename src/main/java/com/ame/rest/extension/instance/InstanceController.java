@@ -3,8 +3,6 @@ package com.ame.rest.extension.instance;
 import java.util.Map;
 
 import com.ame.rest.exceptions.UnexpectedUserType;
-import com.ame.rest.extension.instance.Instance.STATE;
-import com.ame.rest.util.dto.InstanceDTO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -57,18 +55,18 @@ public class InstanceController {
         return service.runInstance(id);
     }
 
-    @PostMapping(value = "/data/get")
-    @PreAuthorize("permitAll()")  //TODO
+    @PostMapping(value = "/data/get", consumes = "application/json", produces = "text/plain")
+    @PreAuthorize("permitAll()")
     @ResponseBody
     public String getData(@RequestBody Map<String,String> request) throws Exception{
-        return service.getData(request);
+        return service.getData(request.get("key"));
     }
 
     @PostMapping(value = "/data/set")
-    @PreAuthorize("permitAll()") //TODO
+    @PreAuthorize("permitAll()")
     @ResponseBody
-    public void setData(@RequestBody Map<String,String> request) throws Exception{
-        service.setData(request);
+    public String setData(@RequestBody Map<String,String> request) throws Exception{
+        return service.setData(request);
     }
 
     @PostMapping(value = "/state/set")

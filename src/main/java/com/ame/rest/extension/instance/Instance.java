@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -46,6 +47,7 @@ public class Instance {
    private Writer writer;
 
    @JsonIgnore
+   @Lob
    private String data;
 
    @JsonIgnore
@@ -66,6 +68,9 @@ public class Instance {
       this.executeCounter = 0;
       this.instanceKey = java.util.UUID.randomUUID();
       this.state = Instance.STATE.OPEN;
+
+      // get initial data for extension
+      this.data = extension.getInitialData();
    }
 
 }

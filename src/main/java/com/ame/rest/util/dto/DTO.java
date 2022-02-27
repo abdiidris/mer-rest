@@ -1,7 +1,5 @@
 package com.ame.rest.util.dto;
 
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public interface DTO {
 

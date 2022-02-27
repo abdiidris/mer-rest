@@ -3,10 +3,10 @@ package com.ame.rest.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ame.rest.util.dto.BrowseExtensionDTO;
+import com.ame.rest.extension.BrowseExtensionDTO;
+import com.ame.rest.extension.DevelopExtensionDTO;
+import com.ame.rest.extension.instance.InstanceDTO;
 import com.ame.rest.util.dto.DTO;
-import com.ame.rest.util.dto.DevelopExtensionDTO;
-import com.ame.rest.util.dto.InstanceDTO;
 import com.ame.rest.util.dto.DTO.DTO_TYPE;
 
 import org.modelmapper.ModelMapper;

@@ -4,8 +4,6 @@ import java.util.List;
 
 import com.ame.rest.exceptions.MissingParameterException;
 import com.ame.rest.exceptions.UnexpectedUserType;
-import com.ame.rest.util.dto.BrowseExtensionDTO;
-import com.ame.rest.util.dto.DevelopExtensionDTO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
