@@ -1,7 +1,11 @@
 package com.ame.rest.extension;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.ame.rest.exceptions.MissingParameterException;
+import com.ame.rest.extension.instance.Instance;
+import com.ame.rest.extension.instance.InstanceService;
 import com.ame.rest.user.UserService;
 import com.ame.rest.util.DTOFactory;
 import com.ame.rest.util.dto.DTO;
@@ -18,6 +22,9 @@ public class ExtensionService {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private InstanceService instanceService;
 
     @Autowired
     DTOFactory dtoFactory;
@@ -37,13 +44,39 @@ public class ExtensionService {
         repo.save(extension);
     }
 
+    public int getExecutionCount(Extension ext) {
+        int total = 0;
+        for(Instance i: ext.getInstances()){
+            total += instanceService.getExecutionCount(i);
+        }
+        return total;
+    }
+
+    // this info will be attached to the browseExtensionDto object when the client requests to browse all extensions
+    public Map<String, Object> setAdditionalDtoInfo(Extension extension){
+        Map<String, Object> info = new HashMap<String, Object>();
+        info.put("developerEmail",extension.getDeveloper().getEmail());
+        info.put("executionCount",getExecutionCount(extension));
+        info.put("instanceCount",extension.getInstances().size());
+        return info;
+
+    }
+
+    public List<BrowseExtensionDTO> findAll() {
+        List<Extension> extensions = repo.findAll();
+        Map<Long, Map<String, Object>> additional = new HashMap<Long, Map<String, Object>>();
+        for(Extension ext: extensions){
+            additional.put(ext.getId(), setAdditionalDtoInfo(ext));
+        }
+        List<BrowseExtensionDTO> dtos = (List<BrowseExtensionDTO>) dtoFactory.getDto(extensions, DTO.DTO_TYPE.BROWSE_EXTENSION,additional); 
+
+        return dtos;
+    }
     public List<DevelopExtensionDTO> findByDeveloper() throws Exception {
         return  (List<DevelopExtensionDTO>) dtoFactory.getDto(repo.findByDeveloper(userService.getCurrentDeveloper()), DTO.DTO_TYPE.DEVELOP_EXTENSION); 
     }
 
-    public List<BrowseExtensionDTO> findAll() {
-        return   (List<BrowseExtensionDTO>) dtoFactory.getDto(repo.findAll(), DTO.DTO_TYPE.BROWSE_EXTENSION); 
-    }
+    
 
     public Extension findById(Long id) {
         return repo.findById(id);

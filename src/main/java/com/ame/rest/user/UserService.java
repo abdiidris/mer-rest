@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import com.ame.rest.exceptions.UnauthorizedAccessAttempt;
 import com.ame.rest.exceptions.UnexpectedUserType;
 import com.ame.rest.security.CustomUserDetailsService;
 import com.ame.rest.user.developer.Developer;
@@ -48,6 +49,17 @@ public class UserService {
         }
 
         throw new BadCredentialsException("Bad credentials");
+
+    }
+
+    public boolean compareUser(User otherUser){
+        User user = userDetailsService.getCurrentUser();
+        if (user.equals(otherUser)) {
+            return true;
+        }
+        else {
+            throw new UnauthorizedAccessAttempt("Unauthorized Access Attempt");
+        }
 
     }
 

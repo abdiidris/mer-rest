@@ -1,6 +1,7 @@
 package com.ame.rest.extension.instance;
 
 import java.sql.Date;
+import java.util.List;
 import java.util.UUID;
 
 import com.ame.rest.extension.Extension;
@@ -18,10 +19,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class InstanceDTO implements DTO {
+public class InstanceDTO extends DTO {
 
-    @JsonIgnore
-    Long id;
     @JsonIgnore
     Extension extension;
     @JsonIgnore
@@ -29,35 +28,24 @@ public class InstanceDTO implements DTO {
     @JsonIgnore
     private UUID instanceKey;
 
-    int executeCounter;
+    String instanceName;
+
     Date createDate;
 
     Instance.STATE state;
+
+    List<Copy> copies;
 
     public String getExtensionName() {
         return extension.getName();
     }
 
-    public String getWebsiteLink() {
-        if (extension.getLinks().containsKey(LINK_TYPE.WEBSITE)) {
-            return extension.getLinks().get(LINK_TYPE.WEBSITE);
-        }
-        return null;
+    public List<Copy>  getCopies() {
+        return copies;
     }
 
-    public String getKey() {
-        return this.id+"_"+this.instanceKey.toString();
-    }
-
-    public String getOpenLink() {
-        if (extension.getLinks().containsKey(LINK_TYPE.OPEN)) {
-            return extension.getLinks().get(LINK_TYPE.OPEN);
-        }
-        return null;
-    }
-
-    public String getExecutionLink() {
-        return "<iframe frameBorder='0'  width='100%' height='100%' src='http://localhost:8080/instance/run/" + id + "'/>";
+    public String  getKey() {
+        return instanceKey.toString();
     }
 
     @Override

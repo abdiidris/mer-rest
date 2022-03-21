@@ -2,8 +2,6 @@ package com.ame.rest.extension;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -26,7 +24,7 @@ import lombok.Setter;
 public class Extension {
 
     public enum LINK_TYPE {
-        OPEN, EXECUTE, DELETE, WEBSITE
+        EDIT, EXECUTE, DELETE, WEBSITE
     }
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)

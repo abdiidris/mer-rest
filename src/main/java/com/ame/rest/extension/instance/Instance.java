@@ -1,15 +1,19 @@
 package com.ame.rest.extension.instance;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -20,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,12 +33,15 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
 @Entity
 public class Instance {
 
-   public enum STATE {
-      DELETED, PAUSED, OPEN, BROKEN
+   protected static enum STATE {
+      DELETE, PAUSE, OPEN, BROKEN
    }
+
+   String instanceName;
 
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    @Id
@@ -53,8 +61,6 @@ public class Instance {
    @JsonIgnore
    private UUID instanceKey;
 
-   private int executeCounter;
-
    private STATE state;
 
    @CreationTimestamp
@@ -62,15 +68,20 @@ public class Instance {
    @Column(name = "create_date")
    private Date createDate;
 
+   @OneToMany(mappedBy = "instance")
+   private List<Copy> copies;
+
    public Instance(Extension extension, Writer writer) {
       this.writer = writer;
       this.extension = extension;
-      this.executeCounter = 0;
       this.instanceKey = java.util.UUID.randomUUID();
       this.state = Instance.STATE.OPEN;
 
       // get initial data for extension
       this.data = extension.getInitialData();
+
+      this.instanceName = extension.getName() + " Instance";
+
    }
 
 }

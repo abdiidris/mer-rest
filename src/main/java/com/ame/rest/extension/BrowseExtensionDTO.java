@@ -4,8 +4,10 @@ import java.util.Map;
 import java.util.Set;
 
 import com.ame.rest.extension.Extension.LINK_TYPE;
+import com.ame.rest.extension.instance.Copy;
 import com.ame.rest.extension.instance.Instance;
 import com.ame.rest.user.developer.Developer;
+import com.ame.rest.extension.instance.Copy;
 import com.ame.rest.util.dto.DTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -16,9 +18,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class BrowseExtensionDTO implements DTO{
+public class BrowseExtensionDTO extends DTO{
 
-    Long id;
     String name;
     String description;
 
@@ -30,36 +31,6 @@ public class BrowseExtensionDTO implements DTO{
 
     @JsonIgnore
     Set<Instance> instances;
-
-    public String getDeveloperEmail() {
-        return this.developer.getEmail();
-    }
-
-    public String getExtensionWebsite() {
-        if (links.containsKey(LINK_TYPE.WEBSITE)) {
-            return links.get(LINK_TYPE.WEBSITE);
-        }
-
-        return "";
-    }
-
-    public int getExecutionCount() {
-
-        int total = 0;
-        for (Instance instance : instances) {
-            total = total + instance.getExecuteCounter();
-        }
-
-        return total;
-    }
-
-    public String getDeveloperName() {
-        return developer.getEmail();
-    }
-
-    public int getInstanceCount() {
-        return instances.size();
-    }
 
     @Override
     public DTO_TYPE getDtoType() {

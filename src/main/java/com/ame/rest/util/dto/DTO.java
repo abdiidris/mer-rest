@@ -1,7 +1,12 @@
 package com.ame.rest.util.dto;
 
+import java.util.Map;
 
-public interface DTO {
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter @Setter
+public abstract class DTO {
 
     public enum DTO_TYPE {
         BROWSE_EXTENSION,
@@ -9,7 +14,10 @@ public interface DTO {
         INSTANCE
     }
 
-    public DTO_TYPE getDtoType();
-    public String getOriginalName();
+    Long id;
+    Map<String,Object> additional;
+
+    public abstract DTO_TYPE getDtoType();
+    public abstract String getOriginalName();
 
 }

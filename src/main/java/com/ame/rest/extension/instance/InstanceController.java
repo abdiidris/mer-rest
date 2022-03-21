@@ -2,6 +2,7 @@ package com.ame.rest.extension.instance;
 
 import java.util.Map;
 
+import com.ame.rest.exceptions.UnauthorizedAccessAttempt;
 import com.ame.rest.exceptions.UnexpectedUserType;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,13 @@ public class InstanceController {
         return service.getInstances();
     }
 
+    @PreAuthorize("hasRole('WRITER')")
+    @PostMapping(value = "/create/copy")
+    @ResponseBody
+    public void createCopy(@RequestBody Map<String,String> request) throws Exception {
+        service.createCopy(request);
+    }
+
     @PostMapping(value = "/create")
     @PreAuthorize("hasRole('WRITER')")
     @ResponseBody
@@ -48,12 +56,28 @@ public class InstanceController {
         return new ResponseEntity<String>("Instance created", HttpStatus.OK);
     }
 
+    @PostMapping(value = "/update")
+    @PreAuthorize("hasRole('WRITER')")
+    @ResponseBody
+    public  ResponseEntity<String> updateDetails(@RequestBody Map<String, String> changes) throws Exception{
+        try {
+            service.updateDetails(changes);
+        } catch (UnauthorizedAccessAttempt e) {
+            return new ResponseEntity<String>(e.getMessage() ,HttpStatus.UNAUTHORIZED);
+        } catch (Exception e) {
+            return new ResponseEntity<String>("Something went wrong : (", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return new ResponseEntity<String>("Instance updated", HttpStatus.OK);
+    }
+
     @GetMapping(value = "/run/{id}")
     @PreAuthorize("permitAll()")
     @ResponseBody
     public String run(@PathVariable Long id) throws Exception{
         return service.runInstance(id);
     }
+
 
     @PostMapping(value = "/data/get", consumes = "application/json", produces = "text/plain")
     @PreAuthorize("permitAll()")

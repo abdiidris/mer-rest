@@ -2,6 +2,7 @@ package com.ame.rest.util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.ame.rest.extension.BrowseExtensionDTO;
 import com.ame.rest.extension.DevelopExtensionDTO;
@@ -34,11 +35,18 @@ public class DTOFactory {
         return null;
     }
 
-    public List<? extends DTO> getDto(List<?> entities, DTO_TYPE type) {
+    public List<? extends DTO> getDto(List<?> entities, DTO_TYPE type, Map<Long,Map<String,Object>> additional) {
+
         List<DTO> dtoList = new ArrayList<>();
 
         for (Object entity : entities) {
-            dtoList.add(getDto(entity, type));
+            DTO dto = getDto(entity, type);
+
+            if (additional.containsKey(dto.getId())) {
+                dto.setAdditional(additional.get(dto.getId()));
+            }
+
+            dtoList.add(dto);
         }
 
         return dtoList;
