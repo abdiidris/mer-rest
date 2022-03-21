@@ -1,106 +1,64 @@
 package com.ame.rest.extension;
 
+import java.util.List;
+import java.util.Map;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
+import com.ame.rest.extension.instance.Instance;
+import com.ame.rest.user.developer.Developer;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
+@NoArgsConstructor
+@Getter @Setter
 public class Extension {
+
+    public enum LINK_TYPE {
+        EDIT, EXECUTE, DELETE, WEBSITE
+    }
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     Long id;
+    @Column(nullable = false, unique = true)
     String name;
     String description;
-    String restUrl;
-    String website;
 
-    public Extension() {
-    }
+    @ElementCollection
+    Map<LINK_TYPE, String> links;
 
-    public Extension(Long id, String name, String description, String restUrl, String website) {
+    @ManyToOne
+    Developer developer;
+
+    @OneToMany(mappedBy = "extension")
+    List<Instance> instances;
+
+    // this is the value that the data for instance is initially set to
+    String initialData;
+
+    protected Extension(Long id, String name, String description, Map<LINK_TYPE, String> links) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.restUrl = restUrl;
-        this.website = website;
+        this.links = links;
+        this.initialData = "";
     }
 
-    public Long getId() {
-        return this.id;
-    }
-
-    public void setId(Long id) {
+    protected Extension(Long id, String name, String description, Map<LINK_TYPE, String> links, String initialData) {
         this.id = id;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public void setName(String name) {
         this.name = name;
-    }
-
-    public String getDescription() {
-        return this.description;
-    }
-
-    public void setDescription(String description) {
         this.description = description;
+        this.links = links;
+        this.initialData = initialData;
     }
-
-    public String getRestUrl() {
-        return this.restUrl;
-    }
-
-    public void setRestUrl(String restUrl) {
-        this.restUrl = restUrl;
-    }
-
-    public String getWebsite() {
-        return this.website;
-    }
-
-    public void setWebsite(String website) {
-        this.website = website;
-    }
-
-    public Extension id(Long id) {
-        setId(id);
-        return this;
-    }
-
-    public Extension name(String name) {
-        setName(name);
-        return this;
-    }
-
-    public Extension description(String description) {
-        setDescription(description);
-        return this;
-    }
-
-    public Extension restUrl(String restUrl) {
-        setRestUrl(restUrl);
-        return this;
-    }
-
-    public Extension website(String website) {
-        setWebsite(website);
-        return this;
-    }
-
-    @Override
-    public String toString() {
-        return "{" +
-            " id='" + getId() + "'" +
-            ", name='" + getName() + "'" +
-            ", description='" + getDescription() + "'" +
-            ", restUrl='" + getRestUrl() + "'" +
-            ", website='" + getWebsite() + "'" +
-            "}";
-    }
-
 }

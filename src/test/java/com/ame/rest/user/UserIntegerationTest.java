@@ -17,8 +17,6 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.ame.rest.RestApplication;
-
 import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
@@ -62,6 +60,21 @@ public class UserIntegerationTest {
   }
 
   @Test
+  public void badUserType() throws Exception{
+    JSONObject ed = new JSONObject();
+
+    ed.put("email", "ed@asdasd");
+    ed.put("password", "JnKing23%%");
+    ed.put("type", "good");
+
+    MvcResult mvcResult = mvc
+        .perform(post("/user/register").contentType(MediaType.APPLICATION_JSON).content(ed.toJSONString()))
+        .andExpect(status().isBadRequest()).andReturn();
+
+    assertTrue(mvcResult.getResolvedException().toString().contains("Could not resolve type id 'good' as a subtype of `com.ame.rest.user.User"));
+  }
+
+  @Test
   public void badEmailTest() throws Exception {
     JSONObject ed = new JSONObject();
 
@@ -97,7 +110,7 @@ public class UserIntegerationTest {
 
     dave.put("email", "dave@gmail.com");
     dave.put("password", "JnKing23%%");
-    dave.put("type", "writer");
+    dave.put("type", "developer");
 
     mvc.perform(post("/user/register").contentType(MediaType.APPLICATION_JSON).content(dave.toJSONString()))
         .andExpect(status().isOk());

@@ -17,6 +17,7 @@ import lombok.NonNull;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -39,10 +40,11 @@ import javax.persistence.DiscriminatorColumn;
 @ToString
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name="DISCRIMINATOR")
+@EqualsAndHashCode
 public abstract class User {
 
-    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @JsonIgnore
     private Long id;
 
     @NonNull
@@ -55,11 +57,13 @@ public abstract class User {
     @Setter(AccessLevel.NONE)
     private String password;
 
+    @JsonIgnore
     private String[] roles;
+
+    @JsonIgnore
     private boolean verified;
 
-
-    public User(String email, String password) {
+    protected User(String email, String password) {
         this.email = email;
         verified = false;
         this.password = password;

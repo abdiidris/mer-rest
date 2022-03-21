@@ -35,7 +35,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 			return loadUserByUsername(current.getEmail());
 		return null;
 	}
-	
+
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 		com.ame.rest.user.User user = this.repository.findByEmail(email);

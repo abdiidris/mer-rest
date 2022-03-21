@@ -41,6 +41,9 @@ public class SecurityPolicy extends WebSecurityConfigurerAdapter{
 		.addFilterAfter(getFilter(JWTSignature), UsernamePasswordAuthenticationFilter.class)
 		.authorizeRequests()
 		.antMatchers(HttpMethod.POST, "/user/login").permitAll()
+		.antMatchers(HttpMethod.GET, "/instance/run/**").permitAll()
+		.antMatchers(HttpMethod.POST, "/instance/data/get").permitAll()
+		.antMatchers(HttpMethod.POST, "/instance/data/set").permitAll()
 		.antMatchers(HttpMethod.POST, "/user/register").permitAll()
 		.anyRequest().authenticated();
 
