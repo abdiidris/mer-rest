@@ -3,7 +3,6 @@ package com.ame.rest.extension.instance;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import com.ame.rest.exceptions.UnauthorizedAccessAttempt;
 import com.ame.rest.extension.Extension;
@@ -13,8 +12,8 @@ import com.ame.rest.extension.instance.Instance.STATE;
 import com.ame.rest.user.UserService;
 import com.ame.rest.util.DTOFactory;
 import com.ame.rest.util.dto.DTO;
+import com.ame.rest.util.dto.DTO.DTO_TYPE;
 
-import org.apache.tomcat.jni.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
@@ -50,9 +49,21 @@ public class InstanceService {
   public void CreateInstance(Long extensionId) throws Exception {
     Extension extension = extensionService.findById(extensionId);
     Instance instance = new Instance(extension, userService.getCurrentWriter());
+
+    // set the instance name as the number of instances for this user for this extension
+    instance.setInstanceName(extension.getName()+" ["+getInstanceCount(extension)+"]");
+
     repo.save(instance);
   }
-
+  public int getInstanceCount(Extension extension){
+    int counter = 0;
+    for (Instance i : extension.getInstances()){
+        if (userService.compareUser(i.getWriter())) {
+          counter++;
+        }
+    }
+    return counter;
+  }
   public Integer getExecutionCount(Instance instance) {
     Integer executionCount = 0;
     for (Copy c : instance.getCopies()) {
@@ -96,6 +107,7 @@ public class InstanceService {
 
     Instance instance = copy.getInstance();
 
+    String executionLink = instance.getExtension().getLinks().get(Extension.LINK_TYPE.EXECUTE);
     // check if the instance is paused or deleted
     // TODO ask if the writer wants to share thier email but for now just post it
     if (instance.getState() != Instance.STATE.OPEN) {
@@ -116,6 +128,19 @@ public class InstanceService {
 
     return data;
 
+  }
+  public void deleteInstance(Instance instance){
+ 
+    if (!validateUser(instance)) return;
+
+    repo.deleteById(instance.getId());
+
+  }
+  public InstanceDTO getInstance(Long id){
+    Instance i = repo.findById(id);
+    InstanceDTO  instanceDTO = (InstanceDTO)dtoFactory.getDto(i, DTO_TYPE.INSTANCE);
+    instanceDTO.setAdditional(setAdditionalDtoInfo(i));
+    return instanceDTO;
   }
 
   public String getData(String id_key) throws Exception {
@@ -152,18 +177,37 @@ public class InstanceService {
     // TODO DELETE should delete data and signal extension api to do the same if
     // applicable
     // PAUSE will just prevent requests until extension is open again
-
+    
     // convert the names to that found in the enum
     Instance instance = repo.findById(id);
+
+    if (instance==null) return;
+    
+    if (state.equals("DELETE")) {
+      this.deleteInstance(instance);
+      return;
+    }
+
     STATE eState = STATE.valueOf(state);
     instance.setState(eState);
     repo.save(instance);
   }
 
-  public void createCopy(Map<String, String> request) {
+  public InstanceDTO deleteCopy(Long copyID) {
+    Copy c = copyRepo.findById(copyID);
+
+    if (c==null) return null;
+    if (!validateUser(c.getInstance())) return null;
+
+    copyRepo.deleteById(c.getId());
+
+    return getInstance(c.getInstance().getId());
+
+  }
+  public InstanceDTO  createCopy(Map<String, String> request) {
     Instance i = repo.findById(Long.parseLong(request.get("instanceId")));
 
-    if (!validateUser(i)) return;
+    if (!validateUser(i)) return null;
 
     Copy c = new Copy(request.get("description"), i);
     List<Copy> copyList = i.getCopies();
@@ -171,6 +215,9 @@ public class InstanceService {
     copyList.add(c);
     copyRepo.save(c);
     repo.save(i);
+
+    // return the updated instance
+   return getInstance(i.getId());
   }
 
   public boolean validateUser(Instance instance){

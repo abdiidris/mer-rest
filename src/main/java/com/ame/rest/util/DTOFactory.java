@@ -7,6 +7,7 @@ import java.util.Map;
 import com.ame.rest.extension.BrowseExtensionDTO;
 import com.ame.rest.extension.DevelopExtensionDTO;
 import com.ame.rest.extension.instance.InstanceDTO;
+import com.ame.rest.user.UserDto;
 import com.ame.rest.util.dto.DTO;
 import com.ame.rest.util.dto.DTO.DTO_TYPE;
 
@@ -29,13 +30,15 @@ public class DTOFactory {
                 return modelMapper.map(entity, DevelopExtensionDTO.class);
             case INSTANCE:
                 return modelMapper.map(entity, InstanceDTO.class);
+            case USER:
+                return modelMapper.map(entity, UserDto.class);
             default:
                 break;
         }
         return null;
     }
 
-    public List<? extends DTO> getDto(List<?> entities, DTO_TYPE type, Map<Long,Map<String,Object>> additional) {
+    public List<? extends DTO> getDto(List<?> entities, DTO_TYPE type, Map<Long, Map<String, Object>> additional) {
 
         List<DTO> dtoList = new ArrayList<>();
 

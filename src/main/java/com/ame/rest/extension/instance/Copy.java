@@ -1,5 +1,6 @@
 package com.ame.rest.extension.instance;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -57,5 +58,6 @@ public class Copy {
         this.instance = instance; 
         this.description = description;
         this.state = STATE.OPEN;
+        executions = new ArrayList<>();
     }
 }

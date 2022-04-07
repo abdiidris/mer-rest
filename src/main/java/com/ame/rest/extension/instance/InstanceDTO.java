@@ -45,7 +45,7 @@ public class InstanceDTO extends DTO {
     }
 
     public String  getKey() {
-        return instanceKey.toString();
+        return this.getId()+"_"+instanceKey.toString();
     }
 
     @Override

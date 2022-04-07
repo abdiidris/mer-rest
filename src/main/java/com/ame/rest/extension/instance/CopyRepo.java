@@ -5,4 +5,5 @@ import org.springframework.data.repository.Repository;
 public interface CopyRepo extends Repository<Copy, Long> {
     Copy findById(Long id);
     void save(Copy copy);
+    void deleteById(Long c);
 }

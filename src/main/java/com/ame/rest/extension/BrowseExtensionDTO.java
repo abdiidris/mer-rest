@@ -3,11 +3,8 @@ package com.ame.rest.extension;
 import java.util.Map;
 import java.util.Set;
 
-import com.ame.rest.extension.Extension.LINK_TYPE;
-import com.ame.rest.extension.instance.Copy;
 import com.ame.rest.extension.instance.Instance;
 import com.ame.rest.user.developer.Developer;
-import com.ame.rest.extension.instance.Copy;
 import com.ame.rest.util.dto.DTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

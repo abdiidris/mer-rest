@@ -8,4 +8,5 @@ public interface InstanceRepository extends Repository<Instance, Long> {
     Iterable<Instance> findByWriter(Writer writer);
     Instance save(Instance Instance);
     Iterable<Instance> findAll();
+    void deleteById(Long id);
 }

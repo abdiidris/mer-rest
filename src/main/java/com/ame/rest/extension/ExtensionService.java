@@ -76,8 +76,6 @@ public class ExtensionService {
         return  (List<DevelopExtensionDTO>) dtoFactory.getDto(repo.findByDeveloper(userService.getCurrentDeveloper()), DTO.DTO_TYPE.DEVELOP_EXTENSION); 
     }
 
-    
-
     public Extension findById(Long id) {
         return repo.findById(id);
     }

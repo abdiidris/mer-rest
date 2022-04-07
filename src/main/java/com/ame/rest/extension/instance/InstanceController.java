@@ -33,18 +33,31 @@ public class InstanceController {
         return service.getInstances();
     }
 
+    @GetMapping(value = "get/instance")
+    @PreAuthorize("hasRole('WRITER')")
+    @ResponseBody
+    public InstanceDTO getInstance(Long id) throws Exception {
+        return service.getInstance(id);
+    }
+
     @PreAuthorize("hasRole('WRITER')")
     @PostMapping(value = "/create/copy")
     @ResponseBody
-    public void createCopy(@RequestBody Map<String,String> request) throws Exception {
-        service.createCopy(request);
+    public InstanceDTO createCopy(@RequestBody Map<String,String> request) throws Exception {
+        return service.createCopy(request);
+    }
+
+    @PreAuthorize("hasRole('WRITER')")
+    @PostMapping(value = "/delete/copy")
+    @ResponseBody
+    public InstanceDTO deleteCopy(@RequestParam Long id) throws Exception {
+         return service.deleteCopy(id);
     }
 
     @PostMapping(value = "/create")
     @PreAuthorize("hasRole('WRITER')")
     @ResponseBody
     public ResponseEntity<String> createInstance(@RequestParam Long extension) {
-
         try {
             service.CreateInstance(extension);
         } catch (UnexpectedUserType e) {

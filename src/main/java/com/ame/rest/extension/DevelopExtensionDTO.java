@@ -21,7 +21,6 @@ import lombok.Setter;
 @Getter @Setter
 public class DevelopExtensionDTO extends DTO{
 
-    // Long id;
     String name;
     String description;
     Map<Extension.LINK_TYPE, String> links;

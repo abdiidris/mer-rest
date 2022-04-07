@@ -23,10 +23,11 @@ public class UserController {
   private UserService service;
 
   // returns true if the user is authenticated
-  @RequestMapping("/")
+  @GetMapping(value = "/", produces = "application/json")
   @ResponseBody
-  public String home() throws InterruptedException {
-    return service.getCurrentUser().getEmail();
+  public UserDto home() throws Exception {
+    UserDto dto = service.getUser();
+    return dto;
   }
 
   // Tokens have a 5 minute expiration. So we give the client the ability to

@@ -79,9 +79,6 @@ public class Instance {
 
       // get initial data for extension
       this.data = extension.getInitialData();
-
-      this.instanceName = extension.getName() + " Instance";
-
    }
 
 }

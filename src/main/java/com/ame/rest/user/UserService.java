@@ -23,6 +23,8 @@ import com.ame.rest.exceptions.UnexpectedUserType;
 import com.ame.rest.security.CustomUserDetailsService;
 import com.ame.rest.user.developer.Developer;
 import com.ame.rest.user.writer.Writer;
+import com.ame.rest.util.DTOFactory;
+import com.ame.rest.util.dto.DTO;
 
 import java.util.Date;
 
@@ -37,6 +39,9 @@ public class UserService {
 
     @Autowired
     private CustomUserDetailsService userDetailsService;
+
+    @Autowired
+    private DTOFactory dtoFactory;
 
     public static final PasswordEncoder PASSWORD_ENCODER = new BCryptPasswordEncoder();
 
@@ -84,6 +89,13 @@ public class UserService {
             throw new UnexpectedUserType("authenticated user is not a developer");
         }
     }
+
+    public UserDto getUser() throws Exception {
+
+        User user = this.getCurrentUser();
+        
+        return (UserDto) dtoFactory.getDto(user, DTO.DTO_TYPE.USER);
+      }
 
     public boolean validateUserInfo(User user) {
 
@@ -145,7 +157,7 @@ public class UserService {
     }
 
     public void registerNewUser(User user) {
-        
+
         user.setPassword(this.encodePassword(user.getPassword()));
         repo.save(user);
 
