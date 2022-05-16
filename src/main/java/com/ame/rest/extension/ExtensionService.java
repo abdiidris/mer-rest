@@ -33,10 +33,10 @@ public class ExtensionService {
 
         extension.setDeveloper(userService.getCurrentDeveloper());
         // ensure the website and execute links are present
-        String websiteLink = extension.getLinks().get(Extension.LINK_TYPE.WEBSITE);
+        // String websiteLink = extension.getLinks().get(Extension.LINK_TYPE.WEBSITE);
         String executeLink = extension.getLinks().get(Extension.LINK_TYPE.EXECUTE);
 
-        if (!StringUtils.hasText(websiteLink) || !StringUtils.hasText(executeLink)) {
+        if (!StringUtils.hasText(executeLink)) {
             throw new MissingParameterException(
                     "Website link and the execution link are required to create a new extension");
         }

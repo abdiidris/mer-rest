@@ -54,7 +54,6 @@ public class Instance {
    @ManyToOne
    private Writer writer;
 
-   @JsonIgnore
    @Lob
    private String data;
 

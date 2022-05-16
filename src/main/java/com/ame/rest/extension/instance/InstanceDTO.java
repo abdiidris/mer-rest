@@ -32,6 +32,8 @@ public class InstanceDTO extends DTO {
 
     Date createDate;
 
+    String data;
+
     Instance.STATE state;
 
     List<Copy> copies;

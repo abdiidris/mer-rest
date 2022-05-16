@@ -55,7 +55,7 @@ public class Copy {
     private List<Date> executions;
 
     public Copy(String description, Instance instance) {
-        this.instance = instance; 
+        this.instance = instance;
         this.description = description;
         this.state = STATE.OPEN;
         executions = new ArrayList<>();

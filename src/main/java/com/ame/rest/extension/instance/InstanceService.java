@@ -50,20 +50,23 @@ public class InstanceService {
     Extension extension = extensionService.findById(extensionId);
     Instance instance = new Instance(extension, userService.getCurrentWriter());
 
-    // set the instance name as the number of instances for this user for this extension
-    instance.setInstanceName(extension.getName()+" ["+getInstanceCount(extension)+"]");
+    // set the instance name as the number of instances for this user for this
+    // extension
+    instance.setInstanceName(extension.getName() + " [" + getInstanceCount(extension) + "]");
 
     repo.save(instance);
   }
-  public int getInstanceCount(Extension extension){
+
+  public int getInstanceCount(Extension extension) {
     int counter = 0;
-    for (Instance i : extension.getInstances()){
-        if (userService.compareUser(i.getWriter())) {
-          counter++;
-        }
+    for (Instance i : extension.getInstances()) {
+      if (userService.compareUser(i.getWriter())) {
+        counter++;
+      }
     }
     return counter;
   }
+
   public Integer getExecutionCount(Instance instance) {
     Integer executionCount = 0;
     for (Copy c : instance.getCopies()) {
@@ -108,37 +111,56 @@ public class InstanceService {
     Instance instance = copy.getInstance();
 
     String executionLink = instance.getExtension().getLinks().get(Extension.LINK_TYPE.EXECUTE);
+
     // check if the instance is paused or deleted
     // TODO ask if the writer wants to share thier email but for now just post it
     if (instance.getState() != Instance.STATE.OPEN) {
       return "instance is not live, contact it's creator @ " + instance.getWriter().getEmail();
     }
 
-    HashMap<String, String> body = new HashMap<>();
-    body.put("data", instance.getData());
+    String doc;
+    // if this is the case, we return an iframe with the url of the extension
+    if (instance.getExtension().isUrlExtension()) {
+      String instanceData = "";
+      if (!instance.getData().equals("")) {
+        instanceData = "?" + instance.getData();
+      }
 
-    String data = clientBuilder().build().post()
-        .uri(instance.getExtension().getLinks().get(Extension.LINK_TYPE.EXECUTE)).body(BodyInserters.fromValue(body))
-        .retrieve().bodyToMono(ExecuteResponse.class).block().getDocument();
+      doc = "<iframe style='height: 100%; width: 100%;' frameborder='0' scrolling='no'  src='" + executionLink
+          + instanceData + "'> </iframe>";
+    } else {
+      // if it is not a url extension, we must call the extension api to get the
+      // document
+      HashMap<String, String> body = new HashMap<>();
+      body.put("data", instance.getData());
+
+      doc = clientBuilder().build().post()
+          .uri(instance.getExtension().getLinks().get(Extension.LINK_TYPE.EXECUTE)).body(BodyInserters.fromValue(body))
+          .retrieve().bodyToMono(ExecuteResponse.class).block().getDocument();
+
+    }
 
     // update counter
     copy.getExecutions().add(new Date());
 
     repo.save(instance);
 
-    return data;
+    return doc;
 
   }
-  public void deleteInstance(Instance instance){
- 
-    if (!validateUser(instance)) return;
+
+  public void deleteInstance(Instance instance) {
+
+    if (!validateUser(instance))
+      return;
 
     repo.deleteById(instance.getId());
 
   }
-  public InstanceDTO getInstance(Long id){
+
+  public InstanceDTO getInstance(Long id) {
     Instance i = repo.findById(id);
-    InstanceDTO  instanceDTO = (InstanceDTO)dtoFactory.getDto(i, DTO_TYPE.INSTANCE);
+    InstanceDTO instanceDTO = (InstanceDTO) dtoFactory.getDto(i, DTO_TYPE.INSTANCE);
     instanceDTO.setAdditional(setAdditionalDtoInfo(i));
     return instanceDTO;
   }
@@ -177,12 +199,13 @@ public class InstanceService {
     // TODO DELETE should delete data and signal extension api to do the same if
     // applicable
     // PAUSE will just prevent requests until extension is open again
-    
+
     // convert the names to that found in the enum
     Instance instance = repo.findById(id);
 
-    if (instance==null) return;
-    
+    if (instance == null)
+      return;
+
     if (state.equals("DELETE")) {
       this.deleteInstance(instance);
       return;
@@ -196,18 +219,22 @@ public class InstanceService {
   public InstanceDTO deleteCopy(Long copyID) {
     Copy c = copyRepo.findById(copyID);
 
-    if (c==null) return null;
-    if (!validateUser(c.getInstance())) return null;
+    if (c == null)
+      return null;
+    if (!validateUser(c.getInstance()))
+      return null;
 
     copyRepo.deleteById(c.getId());
 
     return getInstance(c.getInstance().getId());
 
   }
-  public InstanceDTO  createCopy(Map<String, String> request) {
+
+  public InstanceDTO createCopy(Map<String, String> request) {
     Instance i = repo.findById(Long.parseLong(request.get("instanceId")));
 
-    if (!validateUser(i)) return null;
+    if (!validateUser(i))
+      return null;
 
     Copy c = new Copy(request.get("description"), i);
     List<Copy> copyList = i.getCopies();
@@ -217,18 +244,20 @@ public class InstanceService {
     repo.save(i);
 
     // return the updated instance
-   return getInstance(i.getId());
+    return getInstance(i.getId());
   }
 
-  public boolean validateUser(Instance instance){
+  public boolean validateUser(Instance instance) {
     return userService.compareUser(instance.getWriter());
   }
+
   public void updateDetails(Map<String, String> changes) {
 
     Long id = Long.parseLong(changes.get("id"));
     Instance instance = repo.findById(id);
 
-    if (!validateUser(instance)) return;
+    if (!validateUser(instance))
+      return;
 
     instance.setInstanceName(changes.get("instanceName"));
 

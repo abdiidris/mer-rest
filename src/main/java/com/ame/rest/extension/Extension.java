@@ -20,7 +20,8 @@ import lombok.Setter;
 
 @Entity
 @NoArgsConstructor
-@Getter @Setter
+@Getter
+@Setter
 public class Extension {
 
     public enum LINK_TYPE {
@@ -46,19 +47,28 @@ public class Extension {
     // this is the value that the data for instance is initially set to
     String initialData;
 
-    protected Extension(Long id, String name, String description, Map<LINK_TYPE, String> links) {
-        this.id = id;
+    // this means the initial data will be appended at the end of execute link
+    boolean urlExtension;
+
+    String dataTip;
+
+    protected Extension(String name, String description, Map<LINK_TYPE, String> links) {
         this.name = name;
         this.description = description;
         this.links = links;
         this.initialData = "";
     }
 
-    protected Extension(Long id, String name, String description, Map<LINK_TYPE, String> links, String initialData) {
-        this.id = id;
+    public Extension(String name, String description, Map<LINK_TYPE,String> links, Developer developer, List<Instance> instances, String initialData, boolean urlExtension, String dataTip) {
+ 
         this.name = name;
         this.description = description;
         this.links = links;
+        this.developer = developer;
+        this.instances = instances;
         this.initialData = initialData;
+        this.urlExtension = urlExtension;
+        this.dataTip = dataTip;
     }
+
 }
