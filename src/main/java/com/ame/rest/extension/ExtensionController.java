@@ -2,10 +2,11 @@ package com.ame.rest.extension;
 
 import java.util.List;
 
-import com.ame.rest.exceptions.MissingParameterException;
-import com.ame.rest.exceptions.UnexpectedUserType;
+import com.ame.rest.util.exceptions.MissingParameterException;
+import com.ame.rest.util.exceptions.UnexpectedUserType;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,24 +28,29 @@ public class ExtensionController {
     @GetMapping(value = "/all", produces = "application/json")
     @ResponseBody
     public Iterable<BrowseExtensionDTO> getAll() {
-         Iterable<BrowseExtensionDTO> extension = service.findAll();
-         return extension;
+        Iterable<BrowseExtensionDTO> extension = service.findAll();
+        return extension;
     }
 
     @PostMapping(value = "/register")
     @ResponseBody
     @PreAuthorize("hasRole('DEVELOPER')")
     public ResponseEntity<String> registerExtension(@RequestBody Extension extension) {
-
+        String response;
         try {
-            service.registerExtension(extension);
-        } catch (UnexpectedUserType | MissingParameterException e) {
+            response = service.registerExtension(extension);
+        } catch (UnexpectedUserType e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.UNAUTHORIZED);
-        } catch (Exception e) {
+        } catch (MissingParameterException e) {
+            return new ResponseEntity<String>(ExtensionService.MISSING_LINKS, HttpStatus.BAD_REQUEST);
+        } catch (DataIntegrityViolationException e) {
+            return new ResponseEntity<String>(ExtensionService.NAME_IS_TAKEN, HttpStatus.BAD_REQUEST);
+        }
+        catch (Exception e) {
             return new ResponseEntity<String>("Something went wrong : (", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        return new ResponseEntity<String>("Extension registered", HttpStatus.OK);
+        return new ResponseEntity<String>(ExtensionService.REGISTRATION_SUCCESS, HttpStatus.OK);
     }
 
     @GetMapping(value = "/user")

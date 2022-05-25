@@ -24,7 +24,7 @@ import lombok.Setter;
 @Setter
 public class Extension {
 
-    public enum LINK_TYPE {
+    public static enum LINK_TYPE {
         EDIT, EXECUTE, DELETE, WEBSITE
     }
 
