@@ -1,4 +1,4 @@
-package com.ame.rest.exceptions;
+package com.ame.rest.util.exceptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 public class MissingParameterException extends Exception {

@@ -2,8 +2,8 @@ package com.ame.rest.extension.instance;
 
 import java.util.Map;
 
-import com.ame.rest.exceptions.UnauthorizedAccessAttempt;
-import com.ame.rest.exceptions.UnexpectedUserType;
+import com.ame.rest.util.exceptions.UnauthorizedAccessAttempt;
+import com.ame.rest.util.exceptions.UnexpectedUserType;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

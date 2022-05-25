@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.ame.rest.exceptions.UnauthorizedAccessAttempt;
 import com.ame.rest.extension.Extension;
 import com.ame.rest.extension.ExtensionService;
 import com.ame.rest.extension.Extension.LINK_TYPE;
@@ -13,6 +12,7 @@ import com.ame.rest.user.UserService;
 import com.ame.rest.util.DTOFactory;
 import com.ame.rest.util.dto.DTO;
 import com.ame.rest.util.dto.DTO.DTO_TYPE;
+import com.ame.rest.util.exceptions.UnauthorizedAccessAttempt;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

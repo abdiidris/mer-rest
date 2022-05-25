@@ -3,7 +3,6 @@ package com.ame.rest.user;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,13 +17,13 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import com.ame.rest.exceptions.UnauthorizedAccessAttempt;
-import com.ame.rest.exceptions.UnexpectedUserType;
 import com.ame.rest.security.CustomUserDetailsService;
 import com.ame.rest.user.developer.Developer;
 import com.ame.rest.user.writer.Writer;
 import com.ame.rest.util.DTOFactory;
 import com.ame.rest.util.dto.DTO;
+import com.ame.rest.util.exceptions.UnauthorizedAccessAttempt;
+import com.ame.rest.util.exceptions.UnexpectedUserType;
 
 import java.util.Date;
 
